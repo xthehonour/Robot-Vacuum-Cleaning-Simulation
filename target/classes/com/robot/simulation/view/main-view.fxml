@@ -2,99 +2,232 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.robot.simulation.controller.MainController">
-    <left>
-        <VBox prefWidth="250.0" spacing="15.0" style="-fx-background-color: #f4f4f4;" BorderPane.alignment="CENTER">
+<BorderPane prefHeight="860.0" prefWidth="1360.0" styleClass="app-root"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.robot.simulation.controller.MainController">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="header-bar">
             <padding>
-                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                <Insets bottom="12.0" left="18.0" right="18.0" top="18.0"/>
             </padding>
             <children>
-                <Label text="Kontrol Paneli">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
-                <Separator prefWidth="200.0" />
-
-                <GridPane hgap="5.0" vgap="5.0">
-                  <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                  </columnConstraints>
-                  <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  </rowConstraints>
-                   <children>
-                      <Label text="Genişlik:" />
-                      <Label text="Yükseklik:" GridPane.rowIndex="1" />
-                      <Spinner fx:id="spinGenislik" editable="true" GridPane.columnIndex="1" />
-                      <Spinner fx:id="spinYukseklik" editable="true" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-                   </children>
-                </GridPane>
-
-                <Label text="Algoritma Seçimi:" />
-                <ComboBox fx:id="comboAlgoritma" maxWidth="1.7976931348623157E308" />
-
-                <Label text="Simülasyon Hızı:" />
-                <Slider fx:id="sliderHiz" blockIncrement="1.0" max="10.0" min="1.0" showArrows="true" value="1.0" />
-
-                <Separator prefWidth="200.0" />
-
-                <HBox spacing="10.0">
+                <Label styleClass="logo-label" text="◎"/>
+                <VBox spacing="2.0">
                     <children>
-                        <Button fx:id="btnBaslat" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#baslat" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Başlat" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnDurdur" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#durdur" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Durdur" HBox.hgrow="ALWAYS" />
+                        <Label styleClass="title-label" text="Robot Supurge Simulasyonu"/>
+                        <Label styleClass="subtitle-label" text="JavaFX tabanli akilli supurge kontrol paneli"/>
                     </children>
-                </HBox>
-                <Button fx:id="btnSifirla" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sifirla" text="Sıfırla" />
-
-                <Separator prefWidth="200.0" />
-
-                <Label text="Pil Durumu:" />
-                <ProgressBar fx:id="progressPil" maxWidth="1.7976931348623157E308" progress="1.0" />
-                <Label fx:id="lblPil" alignment="CENTER" maxWidth="1.7976931348623157E308" text="%100" />
-
-                <VBox spacing="5.0" VBox.vgrow="ALWAYS">
-                    <Label text="Olay Günlüğü:">
-                        <font>
-                            <Font name="System Italic" size="13.0" />
-                        </font>
-                    </Label>
-                    <ListView fx:id="listLog" VBox.vgrow="ALWAYS" />
                 </VBox>
-            </children>
-        </VBox>
-    </left>
-    <center>
-        <ScrollPane BorderPane.alignment="CENTER">
-            <content>
-                <StackPane style="-fx-background-color: #ddd;">
-                    <Canvas fx:id="canvas" height="600.0" width="700.0" />
-                </StackPane>
-            </content>
-        </ScrollPane>
-    </center>
-    <bottom>
-        <HBox spacing="20.0" style="-fx-background-color: #333; -fx-padding: 5;">
-            <children>
-                <Label text="Gösterge:" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Label>
-                <Label text="● Mavi: Robot" textFill="#2196f3" />
-                <Label text="● Siyah: Engel" textFill="WHITE" />
-                <Label text="● Sarı: Şarj" textFill="YELLOW" />
-                <Label text="● Pembe: Toz" textFill="PINK" />
-                <Label text="● Turkuaz: Sıvı" textFill="CYAN" />
-                <Label text="● Kahve: Leke" textFill="BROWN" />
-                <Label text="● Yeşil: Temiz" textFill="LIGHTGREEN" />
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label styleClass="header-badge" text="MVC"/>
+                <Label styleClass="header-badge" text="BFS"/>
+                <Label styleClass="header-badge" text="Gercek Zamanli"/>
             </children>
         </HBox>
-    </bottom>
+    </top>
+    <left>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="side-scroll" BorderPane.alignment="CENTER">
+            <content>
+                <VBox prefWidth="312.0" spacing="12.0" styleClass="left-panel">
+                    <padding>
+                        <Insets bottom="18.0" left="18.0" right="12.0" top="0.0"/>
+                    </padding>
+                    <children>
+                        <VBox spacing="10.0" styleClass="panel-card">
+                            <children>
+                                <Label styleClass="card-title" text="Araclar"/>
+                                <Label fx:id="activeToolLabel" styleClass="active-hint" text="Aktif arac: Secili degil"/>
+                                <Button fx:id="dirtModeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#activateDirtMode" styleClass="tool-button" text="Kir Ekle"/>
+                                <ComboBox fx:id="comboDirtType" maxWidth="1.7976931348623157E308"/>
+                                <Button fx:id="obstacleModeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#activateObstacleMode" styleClass="tool-button green" text="Mobilya Ekle"/>
+                                <Button fx:id="eraserModeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#activateEraserMode" styleClass="tool-button red" text="Silgi"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="10.0" styleClass="panel-card">
+                            <children>
+                                <Label styleClass="card-title" text="Simulasyon"/>
+                                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                    <children>
+                                        <Label styleClass="field-label" text="Robot Hizi"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="speedValueLabel" styleClass="field-value compact" text="1.0x"/>
+                                    </children>
+                                </HBox>
+                                <Slider fx:id="speedSlider" blockIncrement="0.25" max="3.0" min="0.5" value="1.0"/>
+                                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                    <children>
+                                        <Label styleClass="field-label" text="Temizlik Algoritmasi"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="algorithmLabel" styleClass="field-value compact" text="Akilli BFS"/>
+                                    </children>
+                                </HBox>
+                                <ComboBox fx:id="comboAlgorithm" maxWidth="1.7976931348623157E308"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="10.0" styleClass="panel-card">
+                            <children>
+                                <Label styleClass="card-title" text="Robot Durumu"/>
+                                <HBox spacing="12.0">
+                                    <children>
+                                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="field-label" text="Konum"/>
+                                                <Label fx:id="positionLabel" styleClass="field-value" text="(0, 0)"/>
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="field-label" text="Yon"/>
+                                                <Label fx:id="directionLabel" styleClass="field-value" text="Dogu"/>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <HBox spacing="12.0">
+                                    <children>
+                                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="field-label" text="Temizlenen Alan"/>
+                                                <Label fx:id="cleanedAreaLabel" styleClass="field-value" text="0%"/>
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="field-label" text="Kalan Kir"/>
+                                                <Label fx:id="dirtyAreaLabel" styleClass="field-value" text="0 hucre"/>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <HBox spacing="12.0">
+                                    <children>
+                                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="field-label" text="Gecen Sure"/>
+                                                <Label fx:id="elapsedTimeLabel" styleClass="field-value" text="00:00"/>
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="field-label" text="Mod"/>
+                                                <Label fx:id="modeLabel" styleClass="field-value" text="Beklemede"/>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <Label styleClass="field-label" text="Batarya"/>
+                                <ProgressBar fx:id="batteryProgress" maxWidth="1.7976931348623157E308" progress="1.0"/>
+                                <Label fx:id="batteryValueLabel" styleClass="field-value" text="\%100"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="10.0" styleClass="panel-card">
+                            <children>
+                                <Label styleClass="card-title" text="Pil Kontrolu"/>
+                                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                    <children>
+                                        <Label styleClass="field-label" text="Secili deger"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="batterySliderValueLabel" styleClass="field-value compact" text="\%100"/>
+                                    </children>
+                                </HBox>
+                                <Slider fx:id="batterySlider" blockIncrement="5.0" max="100.0" min="0.0" value="100.0"/>
+                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#applyBattery" styleClass="tool-button secondary" text="Bataryayi Uygula"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="10.0" styleClass="panel-card">
+                            <children>
+                                <Label styleClass="card-title" text="Kontroller"/>
+                                <FlowPane hgap="8.0" vgap="8.0">
+                                    <children>
+                                        <Button mnemonicParsing="false" onAction="#startSimulation" prefWidth="128.0" styleClass="tool-button primary" text="Baslat"/>
+                                        <Button mnemonicParsing="false" onAction="#pauseSimulation" prefWidth="128.0" styleClass="tool-button secondary" text="Duraklat"/>
+                                        <Button mnemonicParsing="false" onAction="#resetSimulation" prefWidth="128.0" styleClass="tool-button red" text="Sifirla"/>
+                                        <Button mnemonicParsing="false" onAction="#returnToStation" prefWidth="128.0" styleClass="tool-button blue" text="Istasyona Don"/>
+                                    </children>
+                                </FlowPane>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="10.0" styleClass="panel-card">
+                            <children>
+                                <Label styleClass="card-title" text="Olay Kaydi"/>
+                                <ListView fx:id="eventLog" prefHeight="220.0"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </left>
+    <center>
+        <VBox spacing="14.0">
+            <padding>
+                <Insets bottom="18.0" left="8.0" right="18.0" top="0.0"/>
+            </padding>
+            <children>
+                <StackPane styleClass="board-card" VBox.vgrow="ALWAYS">
+                    <children>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true" styleClass="transparent-scroll">
+                            <content>
+                                <Canvas fx:id="canvas" height="620.0" width="820.0"/>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </StackPane>
+                <FlowPane hgap="14.0" vgap="10.0" styleClass="status-strip">
+                    <children>
+                        <VBox spacing="4.0" styleClass="status-card" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="status-title" text="Toplam Alan"/>
+                                <Label fx:id="totalAreaLabel" styleClass="status-value" text="0 m2"/>
+                            </children>
+                        </VBox>
+                        <VBox spacing="4.0" styleClass="status-card" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="status-title" text="Temizlenen Alan"/>
+                                <Label fx:id="statusDirtyLabel" styleClass="status-value" text="0"/>
+                            </children>
+                        </VBox>
+                        <VBox spacing="4.0" styleClass="status-card" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="status-title" text="Kalan Kir"/>
+                                <Label fx:id="statusCleanedLabel" styleClass="status-value" text="0"/>
+                            </children>
+                        </VBox>
+                        <VBox spacing="4.0" styleClass="status-card" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="status-title" text="Kalan Oran"/>
+                                <Label fx:id="statusRemainingLabel" styleClass="status-value" text="0%"/>
+                            </children>
+                        </VBox>
+                        <VBox spacing="4.0" styleClass="status-card" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="status-title" text="Gecen Sure"/>
+                                <Label fx:id="statusTimeLabel" styleClass="status-value" text="00:00"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </FlowPane>
+            </children>
+        </VBox>
+    </center>
 </BorderPane>
