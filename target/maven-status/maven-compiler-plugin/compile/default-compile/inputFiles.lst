@@ -1,0 +1,9 @@
+/app/src/main/java/com/robot/simulation/controller/MainController.java
+/app/src/main/java/com/robot/simulation/model/Izgara.java
+/app/src/main/java/com/robot/simulation/MainApp.java
+/app/src/main/java/com/robot/simulation/model/Hucre.java
+/app/src/main/java/module-info.java
+/app/src/main/java/com/robot/simulation/controller/YolBulucu.java
+/app/src/main/java/com/robot/simulation/controller/Algoritma.java
+/app/src/main/java/com/robot/simulation/model/KirTipi.java
+/app/src/main/java/com/robot/simulation/model/Robot.java
