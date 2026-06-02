@@ -1,4 +1,0 @@
---patch-module
-com.robot.simulation=_
---add-reads
-com.robot.simulation=ALL-UNNAMED

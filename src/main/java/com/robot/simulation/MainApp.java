@@ -13,7 +13,6 @@ public class MainApp extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("view/main-view.fxml"));
         Scene scene = new Scene(loader.load(), 1360, 860);
-        scene.getStylesheets().add(MainApp.class.getResource("view/app.css").toExternalForm());
 
         stage.setTitle("Robot Supurge Simulasyonu");
         stage.setScene(scene);

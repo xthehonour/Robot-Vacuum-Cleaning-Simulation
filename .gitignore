@@ -1,4 +1,6 @@
 target/
+out/
+out-test/
 .settings/
 .classpath
 .project
