@@ -14,17 +14,22 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Locale;
 
 public class MainController {
@@ -34,6 +39,14 @@ public class MainController {
         OBSTACLE,
         ERASER
     }
+
+    private static final List<String> VACUUM_SOUND_CANDIDATES = List.of(
+            "/com/robot/simulation/audio/WhatsApp Audio 2026-06-02 at 17.17.49.wav",
+            "/com/robot/simulation/audio/vacuum.mp3",
+            "/com/robot/simulation/audio/vacuum.wav",
+            "/com/robot/simulation/audio/supurge.mp3",
+            "/com/robot/simulation/audio/supurge.wav"
+    );
 
     @FXML private BorderPane root;
     @FXML private Canvas canvas;
@@ -59,6 +72,9 @@ public class MainController {
     @FXML private Label statusRemainingLabel;
     @FXML private Label statusTimeLabel;
     @FXML private Label roomTitleLabel;
+    @FXML private CheckBox soundEnabledCheckBox;
+    @FXML private Slider volumeSlider;
+    @FXML private Label volumeValueLabel;
     @FXML private ListView<String> eventLog;
     @FXML private Button dirtModeButton;
     @FXML private Button obstacleModeButton;
@@ -67,6 +83,7 @@ public class MainController {
     private final EnumMap<RoomType, VacuumSimulation> simulations = new EnumMap<>(RoomType.class);
     private CanvasBoardRenderer boardRenderer;
     private Timeline timeline;
+    private MediaPlayer vacuumSoundPlayer;
     private EditMode editMode = EditMode.NONE;
     private RoomType activeRoom = RoomType.BATHROOM;
     private boolean syncingControls;
@@ -78,6 +95,7 @@ public class MainController {
         JavaFxStyler.applyTo(root);
         initializeControls();
         initializeTimeline();
+        initializeSound();
         registerEventHandlers();
         syncInitialControlValues();
         refresh();
@@ -87,6 +105,7 @@ public class MainController {
     private void startSimulation() {
         simulation().start();
         timeline.play();
+        syncSoundPlayback();
         refresh();
     }
 
@@ -94,12 +113,14 @@ public class MainController {
     private void pauseSimulation() {
         simulation().pause();
         timeline.pause();
+        syncSoundPlayback();
         refresh();
     }
 
     @FXML
     private void resetSimulation() {
         timeline.stop();
+        syncSoundPlayback();
         simulation().reset();
         syncRoomControls();
         editMode = EditMode.NONE;
@@ -190,6 +211,8 @@ public class MainController {
         comboAlgorithm.valueProperty().addListener((obs, oldValue, newValue) -> changeAlgorithm(newValue));
         speedSlider.valueProperty().addListener((obs, oldValue, newValue) -> changeSpeed(newValue.doubleValue()));
         batterySlider.valueProperty().addListener((obs, oldValue, newValue) -> updateBatterySliderLabel(newValue.doubleValue()));
+        soundEnabledCheckBox.selectedProperty().addListener((obs, oldValue, newValue) -> syncSoundPlayback());
+        volumeSlider.valueProperty().addListener((obs, oldValue, newValue) -> changeVolume(newValue.doubleValue()));
         canvas.setOnMouseClicked(event -> editCellAt(event.getX(), event.getY()));
     }
 
@@ -216,8 +239,19 @@ public class MainController {
         speedValueLabel.setText(String.format(Locale.US, "%.1fx", speed));
     }
 
+    private void changeVolume(double volume) {
+        updateVolumeLabel(volume);
+        if (vacuumSoundPlayer != null) {
+            vacuumSoundPlayer.setVolume(volume / 100.0);
+        }
+    }
+
     private void updateBatterySliderLabel(double batteryLevel) {
         batterySliderValueLabel.setText("%" + String.format(Locale.US, "%.0f", batteryLevel));
+    }
+
+    private void updateVolumeLabel(double volume) {
+        volumeValueLabel.setText("%" + String.format(Locale.US, "%.0f", volume));
     }
 
     private void editCellAt(double canvasX, double canvasY) {
@@ -240,6 +274,7 @@ public class MainController {
         drawScene();
         syncLabels();
         appendLogs();
+        syncSoundPlayback();
     }
 
     private void syncLabels() {
@@ -296,6 +331,46 @@ public class MainController {
 
     private VacuumSimulation simulation() {
         return simulations.get(activeRoom);
+    }
+
+    private void initializeSound() {
+        updateVolumeLabel(volumeSlider.getValue());
+
+        URL soundUrl = findVacuumSoundUrl();
+        if (soundUrl == null) {
+            soundEnabledCheckBox.setSelected(false);
+            soundEnabledCheckBox.setDisable(true);
+            volumeSlider.setDisable(true);
+            volumeValueLabel.setText("Dosya yok");
+            return;
+        }
+
+        vacuumSoundPlayer = new MediaPlayer(new Media(soundUrl.toExternalForm()));
+        vacuumSoundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        vacuumSoundPlayer.setVolume(volumeSlider.getValue() / 100.0);
+    }
+
+    private URL findVacuumSoundUrl() {
+        for (String resourcePath : VACUUM_SOUND_CANDIDATES) {
+            URL url = MainController.class.getResource(resourcePath);
+            if (url != null) {
+                return url;
+            }
+        }
+        return null;
+    }
+
+    private void syncSoundPlayback() {
+        if (vacuumSoundPlayer == null) {
+            return;
+        }
+
+        boolean shouldPlay = simulation().isRunning() && soundEnabledCheckBox.isSelected();
+        if (shouldPlay && vacuumSoundPlayer.getStatus() != MediaPlayer.Status.PLAYING) {
+            vacuumSoundPlayer.play();
+        } else if (!shouldPlay && vacuumSoundPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            vacuumSoundPlayer.stop();
+        }
     }
 
     private void syncRoomControls() {

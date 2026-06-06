@@ -14,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 import java.util.List;
+import java.util.Set;
 
 public class CanvasBoardRenderer {
     public static final double CELL_SIZE = 34.0;
@@ -40,7 +41,7 @@ public class CanvasBoardRenderer {
         drawPaths(gc, simulation.getTravelTrail(), Color.web("#60a5fa"), false);
         drawPaths(gc, simulation.getActivePath(), Color.web("#22c55e"), true);
         drawFurniture(gc, grid);
-        drawGridContents(gc, grid);
+        drawGridContents(gc, grid, grid.getUnreachableWalkableCells());
         drawRobot(gc, simulation.getRobot());
         drawAxis(gc, grid);
     }
@@ -104,21 +105,29 @@ public class CanvasBoardRenderer {
         );
     }
 
-    private void drawGridContents(GraphicsContext gc, RoomGrid grid) {
+    private void drawGridContents(GraphicsContext gc, RoomGrid grid, Set<GridPoint> unreachableCells) {
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
-                drawCell(gc, grid, grid.cell(x, y));
+                drawCell(gc, grid, grid.cell(x, y), unreachableCells);
             }
         }
     }
 
-    private void drawCell(GraphicsContext gc, RoomGrid grid, Cell cell) {
+    private void drawCell(GraphicsContext gc, RoomGrid grid, Cell cell, Set<GridPoint> unreachableCells) {
         double drawX = PADDING + cell.getX() * CELL_SIZE;
         double drawY = PADDING + cell.getY() * CELL_SIZE;
 
         if (cell.isVisited() && !cell.isObstacle()) {
             gc.setFill(Color.color(0.85, 0.95, 1.0, 0.35));
             gc.fillRoundRect(drawX + 3, drawY + 3, CELL_SIZE - 6, CELL_SIZE - 6, 8, 8);
+        }
+
+        if (unreachableCells.contains(cell.getPoint())) {
+            gc.setFill(Color.color(0.95, 0.10, 0.10, 0.35));
+            gc.fillRoundRect(drawX + 3, drawY + 3, CELL_SIZE - 6, CELL_SIZE - 6, 8, 8);
+            gc.setStroke(Color.web("#dc2626"));
+            gc.setLineWidth(2);
+            gc.strokeRoundRect(drawX + 4, drawY + 4, CELL_SIZE - 8, CELL_SIZE - 8, 8, 8);
         }
 
         if (cell.isObstacle() && !grid.isFurnitureCell(cell.getX(), cell.getY())) {

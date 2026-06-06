@@ -3,6 +3,7 @@ package com.robot.simulation.view;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.ListView;
@@ -85,6 +86,8 @@ public final class JavaFxStyler {
     private static void applyControlStyle(Node node, String classes) {
         if (node instanceof Button button && classes.contains("tool-button")) {
             button.setStyle(buttonStyle(button));
+        } else if (node instanceof CheckBox) {
+            node.setStyle("-fx-text-fill: #e2e8f0; -fx-font-size: 12px; -fx-font-weight: 600;");
         } else if (node instanceof ComboBox<?>) {
             node.setStyle("-fx-background-radius: 10; -fx-background-color: rgba(30, 41, 59, 0.85);");
         } else if (node instanceof ListView<?>) {

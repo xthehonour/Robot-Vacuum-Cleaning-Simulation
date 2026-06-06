@@ -1,8 +1,12 @@
 package com.robot.simulation.model;
 
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 
 public class RoomGrid {
     private final int width;
@@ -190,6 +194,43 @@ public class RoomGrid {
 
     public List<FurnitureItem> getFurnitureItems() {
         return List.copyOf(furnitureItems);
+    }
+
+    public Set<GridPoint> getUnreachableWalkableCells() {
+        Set<GridPoint> reachable = reachableCellsFromChargingStation();
+        Set<GridPoint> unreachable = new HashSet<>();
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                GridPoint point = cells[x][y].getPoint();
+                if (!cells[x][y].isObstacle() && !reachable.contains(point)) {
+                    unreachable.add(point);
+                }
+            }
+        }
+        return unreachable;
+    }
+
+    private Set<GridPoint> reachableCellsFromChargingStation() {
+        Set<GridPoint> reachable = new HashSet<>();
+        Queue<GridPoint> queue = new ArrayDeque<>();
+        GridPoint start = getChargingStation();
+
+        if (!isWalkable(start)) {
+            return reachable;
+        }
+
+        reachable.add(start);
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            GridPoint current = queue.poll();
+            for (GridPoint neighbor : neighbors(current)) {
+                if (reachable.add(neighbor)) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+        return reachable;
     }
 
     public GridPoint getChargingStation() {

@@ -1,6 +1,7 @@
 module com.robot.simulation {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
 
     opens com.robot.simulation to javafx.fxml;
     opens com.robot.simulation.controller to javafx.fxml;
